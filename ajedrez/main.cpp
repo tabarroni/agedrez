@@ -29,6 +29,12 @@ private:
         tablero[7][0] = 'R'; tablero[7][1] = 'N'; tablero[7][2] = 'B'; tablero[7][3] = 'Q';
         tablero[7][4] = 'K'; tablero[7][5] = 'B'; tablero[7][6] = 'N'; tablero[7][7] = 'R';
         turnoBlancas = true;
+
+public:
+    Ajedrez(){
+        inicializarTablero()
+    }
+    void imprimirTablero(){
     }
 };
 int main()
