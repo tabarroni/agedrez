@@ -39,7 +39,13 @@ public:
         cout << "  +---+---+---+---+---+---+---+---+\n";
         for(int i =0;i<8;i++){
             cout << 8 - i << " |";
+            for(int j=0;j<8;j++){
+                cout << " " << tablero[i][j] << " |";
+            }
+            cout << " " << 8 - i << "\n";
+            cout << "  +---+---+---+---+---+---+---+---+\n";
         }
+        cout << "    a   b   c   d   e   f   g   h\n\n";
     }
 };
 int main()
