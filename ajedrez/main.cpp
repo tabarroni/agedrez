@@ -7,7 +7,7 @@ using namespace std;
 struct Posicion {
     int fila;
     int columna;
-    int columna;
+
 };
 class Ajedrez{
 private:
@@ -76,10 +76,106 @@ public:
         char pieza = tablero[o.fila][o.columna];
         char destino = tablero[d.fila][d.columna];
         //no puedes comerte tu misma pieza
+        if(!='.'&& destino !='.' &&
+            ((isupper(pieza) && isupper(destino)) || (islower(pieza) && islower(destino)))){
+                return false;
+
+            }
+        char p = toupper(pieza);
+        int diFila= d.fila-o.fila;
+        int difCol = d.columna - o.columna;
+        switch (p) {
+            case 'P': { // Peón
+                int direccion = turnoBlancas ? -1 : 1;
+                // Movimiento hacia adelante
+                if (difCol == 0 && destino == '.') {
+                    if (difFila == direccion) return true;
+                    // Salto doble inicial
+                    if ((turnoBlancas && o.fila == 6 && difFila == -2 && tablero[o.fila - 1][o.columna] == '.') ||
+                        (!turnoBlancas && o.fila == 1 && difFila == 2 && tablero[o.fila + 1][o.columna] == '.')) {
+                        return true;
+                    }
+                }
+                // Captura diagonal
+                if (abs(difCol) == 1 && difFila == direccion && destino != '.') {
+                    return true;
+                }
+                break;
+            }
+            case 'R': // Torre
+                if (difFila == 0 || difCol == 0) return true;
+                break;
+            case 'N': // Caballo
+                if ((abs(difFila) == 2 && abs(difCol) == 1) || (abs(difFila) == 1 && abs(difCol) == 2)) return true;
+                break;
+            case 'B': // Alfil
+                if (abs(difFila) == abs(difCol)) return true;
+                break;
+            case 'Q': // Reina
+                if (difFila == 0 || difCol == 0 || abs(difFila) == abs(difCol)) return true;
+                break;
+            case 'K': // Rey
+                if (abs(difFila) <= 1 && abs(difCol) <= 1) return true;
+                break;
+        }
+        return false;
     }
+    bool mover(string movimiento) {
+        Posicion o, d;
+        if (!convertirCoordenadas(movimiento, o, d)) {
+            cout << "Coordenadas inválidas. Usa el formato ej: e2e4\n";
+            return false;
+        }
+
+        char pieza = tablero[o.fila][o.columna];
+
+        if (pieza == '.') {
+            cout << "No hay ninguna pieza en esa posición de origen.\n";
+            return false;
+        }
+
+        if (!validarTurno(pieza)) {
+            cout << "No es el turno de esa pieza.\n";
+            return false;
+        }
+
+        if (!esMovimientoValido(o, d)) {
+            cout << "Movimiento no permitido para esa pieza.\n";
+            return false;
+        }
+
+        // Realizar movimiento
+        tablero[d.fila][d.columna] = pieza;
+        tablero[o.fila][o.columna] = '.';
+
+        // Cambiar turno
+        turnoBlancas = !turnoBlancas;
+        return true;
+    }
+
+    bool estaEnTurnoBlancas() {
+        return turnoBlancas;
+    }
+
 };
 int main()
 {
-    cout << "Hello world!" << endl;
+    Ajedrez juego;
+    string movimiento;
+
+    cout << "=== BIENVENIDO A AJEDREZ EN C++ ===\n";
+    cout << "Instrucciones: Ingresa los movimientos en formato algebraico (ej: e2e4).\n";
+    cout << "Escribe 'salir' para terminar el juego.\n";
+
+    while (true) {
+        juego.imprimirTablero();
+        cout << "Turno de: " << (juego.estaEnTurnoBlancas() ? "Blancas (Mayúsculas)" : "Negras (Minúsculas)") << "\n";
+        cout << "Ingresa movimiento: ";
+        cin >> movimiento;
+
+        if (movimiento == "salir") break;
+
+        juego.mover(movimiento);
+    }
     return 0;
 }
