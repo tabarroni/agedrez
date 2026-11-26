@@ -49,7 +49,20 @@ public:
     }
     // Convierte una jugada en texto (ej. "e2e4") a coordenadas numéricas
     bool convertirCoordenadas(string mov, Posicion &origen, Posicion &destino){
+        if(mov.length() !=4) ruturn false;
+        origen.columna = mov[0] - 'a';
+        origen.fila = 8 - (mov[1] - '0');
 
+        destino.columna = mov[2] - 'a';
+        destino.fila = 8 - (mov[3] - '0');
+
+        // Verificar que estén dentro del tablero
+        if (origen.fila < 0 || origen.fila > 7 || origen.columna < 0 || origen.columna > 7 ||
+            destino.fila < 0 || destino.fila > 7 || destino.columna < 0 || destino.columna > 7) {
+            return false;
+        }
+
+        return true;
 
     }
 };
