@@ -47,6 +47,11 @@ public:
         }
         cout << "    a   b   c   d   e   f   g   h\n\n";
     }
+    // Convierte una jugada en texto (ej. "e2e4") a coordenadas numéricas
+    bool convertirCoordenadas(string mov, Posicion &origen, Posicion &destino){
+
+
+    }
 };
 int main()
 {
