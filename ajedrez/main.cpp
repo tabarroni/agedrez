@@ -174,6 +174,29 @@ public:
         tablero[d.fila][d.columna] = pieza;
         tablero[o.fila][o.columna] = '.';
 
+        // Aplicar movimiento al tablero real
+        tablero[d.fila][d.columna] = pieza;
+        tablero[o.fila][o.columna] = '.';
+
+        // === INICIO: LÓGICA DE PROMOCIÓN DE PEÓN ===
+        if ((pieza == 'P' && d.fila == 0) || (pieza == 'p' && d.fila == 7)) {
+            char eleccion;
+            cout << "\n¡Promocion de peon alcanzada!\n";
+            cout << "Elige pieza ([Q]uena/Dama, [R]orre, [B]ishop/Alfil, [N]ight/Caballo): ";
+            cin >> eleccion;
+
+            eleccion = toupper(eleccion);
+            char piezaFinal = 'Q'; // Por defecto Reina
+
+            if (eleccion == 'R' || eleccion == 'B' || eleccion == 'N') {
+                piezaFinal = eleccion;
+            }
+
+            // Asignar mayúscula si es blanca, minúscula si es negra
+            tablero[d.fila][d.columna] = isupper(pieza) ? piezaFinal : tolower(piezaFinal);
+        }
+        // === FIN DE PROMOCIÓN ===
+
         // Cambiar turno
         turnoBlancas = !turnoBlancas;
         return true;
