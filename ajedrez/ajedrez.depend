@@ -9,3 +9,9 @@
 	<vector>
 	<string>
 
+1795724456 source:e:\agedrez\ajedrez\ajedrez.cpp
+	"Ajedrez.h"
+	<iostream>
+	<cctype>
+	<cmath>
+
