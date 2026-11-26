@@ -35,6 +35,11 @@ public:
         inicializarTablero()
     }
     void imprimirTablero(){
+        cout <<"\n    a   b   c   d   e   f   g   h\n";
+        cout << "  +---+---+---+---+---+---+---+---+\n";
+        for(int i =0;i<8;i++){
+            cout << 8 - i << " |";
+        }
     }
 };
 int main()
