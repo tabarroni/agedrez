@@ -93,7 +93,6 @@ private:
                 break;
             case 'K':
                 if (abs(difFila) <= 1 && abs(difCol) <= 1) return true;
-                // Enroque
                 if (difFila == 0 && abs(difCol) == 2) return true;
                 break;
         }
@@ -142,6 +141,50 @@ public:
         return esMovimientoGeometricoValido(o, d, tablero);
     }
 
+    // === LÓGICA DE TABLAS POR INSUFICIENCIA DE MATERIAL ===
+    bool hayInsuficienciaMaterial() {
+        vector<char> piezasBlancas;
+        vector<char> piezasNegras;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                char p = tablero[i][j];
+                if (p != '.') {
+                    if (isupper(p)) piezasBlancas.push_back(p);
+                    else piezasNegras.push_back(p);
+                }
+            }
+        }
+
+        // Caso 1: Rey contra Rey solo
+        if (piezasBlancas.size() == 1 && piezasNegras.size() == 1) return true;
+
+        // Caso 2: Rey y Alfil o Rey y Caballo contra Rey solo
+        if ((piezasBlancas.size() == 2 && piezasNegras.size() == 1) ||
+            (piezasBlancas.size() == 1 && piezasNegras.size() == 2)) {
+            char piezaExtra = (piezasBlancas.size() == 2) ? piezasBlancas[1] : piezasNegras[1];
+            if (toupper(piezaExtra) == 'B' || toupper(piezaExtra) == 'N') return true;
+        }
+
+        // Caso 3: Rey y Alfil contra Rey y Alfil (con alfiles en casillas del mismo color)
+        if (piezasBlancas.size() == 2 && piezasNegras.size() == 2 &&
+            toupper(piezasBlancas[1]) == 'B' && toupper(piezasNegras[1]) == 'B') {
+            Posicion alfilB = {-1, -1}, alfilN = {-1, -1};
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (tablero[i][j] == 'B') alfilB = {i, j};
+                    if (tablero[i][j] == 'b') alfilN = {i, j};
+                }
+            }
+            // Si la suma de (fila + columna) es par o impar, indica el color de la casilla
+            bool colorB = (alfilB.fila + alfilB.columna) % 2 == 0;
+            bool colorN = (alfilN.fila + alfilN.columna) % 2 == 0;
+            if (colorB == colorN) return true;
+        }
+
+        return false;
+    }
+
     bool mover(string movimiento) {
         if (movimiento.length() != 4) return false;
         Posicion o = {8 - (movimiento[1] - '0'), movimiento[0] - 'a'};
@@ -158,7 +201,6 @@ public:
             return false;
         }
 
-        // Simular en tablero temporal para verificar que no te pongas en jaque tú mismo
         char temp[8][8];
         for(int i=0; i<8; i++) for(int j=0; j<8; j++) temp[i][j] = tablero[i][j];
 
@@ -170,40 +212,24 @@ public:
             return false;
         }
 
-        // Aplicar movimiento al tablero real
         tablero[d.fila][d.columna] = pieza;
         tablero[o.fila][o.columna] = '.';
 
-        // Aplicar movimiento al tablero real
-        tablero[d.fila][d.columna] = pieza;
-        tablero[o.fila][o.columna] = '.';
-
-        // === INICIO: LÓGICA DE PROMOCIÓN DE PEÓN ===
+        // Promoción automática a Reina si llega al final
         if ((pieza == 'P' && d.fila == 0) || (pieza == 'p' && d.fila == 7)) {
-            char eleccion;
-            cout << "\n¡Promocion de peon alcanzada!\n";
-            cout << "Elige pieza ([Q]uena/Dama, [R]orre, [B]ishop/Alfil, [N]ight/Caballo): ";
-            cin >> eleccion;
-
-            eleccion = toupper(eleccion);
-            char piezaFinal = 'Q'; // Por defecto Reina
-
-            if (eleccion == 'R' || eleccion == 'B' || eleccion == 'N') {
-                piezaFinal = eleccion;
-            }
-
-            // Asignar mayúscula si es blanca, minúscula si es negra
-            tablero[d.fila][d.columna] = isupper(pieza) ? piezaFinal : tolower(piezaFinal);
+            tablero[d.fila][d.columna] = isupper(pieza) ? 'Q' : 'q';
         }
-        // === FIN DE PROMOCIÓN ===
 
-        // Cambiar turno
         turnoBlancas = !turnoBlancas;
         return true;
     }
 
     bool esJaqueMateActual() {
         return esJaqueMate(turnoBlancas);
+    }
+
+    bool esTablasPorInsuficiencia() {
+        return hayInsuficienciaMaterial();
     }
 
 private:
@@ -237,7 +263,17 @@ int main() {
     string mov;
     while (true) {
         juego.imprimirTablero();
-        cout << "Turno de: " << (juego.esJaqueMateActual() ? "JAQUE MATE. Fin del juego." : "") << endl;
+
+        if (juego.esJaqueMateActual()) {
+            cout << "=== JAQUE MATE. ¡Fin del juego! ===\n";
+            break;
+        }
+        if (juego.esTablasPorInsuficiencia()) {
+            cout << "=== TABLAS por insuficiencia de material. ¡Empate! ===\n";
+            break;
+        }
+
+        cout << "Turno de: " << (juego.esTablasPorInsuficiencia() ? "" : "") << endl;
         cout << "Ingresa movimiento: ";
         cin >> mov;
         if (mov == "salir") break;
