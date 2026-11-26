@@ -64,6 +64,18 @@ public:
 
         return true;
 
+
+    }
+    bool validarturno(char pieza){
+        if (turnoBlancas && isupper(pieza)) return true;
+        if (!turnoBlancas && islower(pieza)) return true;
+        return false;
+
+    // Validación simplificada de movimientos por tipo de pieza
+    bool esMovimientoValido(posicion o, posicion d){
+        char pieza = tablero[o.fila][o.columna];
+        char destino = tablero[d.fila][d.columna];
+        //no puedes comerte tu misma pieza
     }
 };
 int main()
