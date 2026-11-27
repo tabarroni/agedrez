@@ -11,9 +11,19 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option projectIncludeDirsRelation="0" />
 				<Compiler>
+					<Add option="-std=c++17" />
 					<Add option="-g" />
+					<Add directory="E:/SFML-3.1.0/include" />
 				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add directory="E:/SFML-3.1.0/include" />
+					<LinkerExe value="CppCompiler" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/ajedrez" prefix_auto="1" extension_auto="1" />
@@ -32,6 +42,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Ajedrez.cpp" />
+		<Unit filename="Ajedrez.h" />
+		<Unit filename="SFML-3.1.0" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

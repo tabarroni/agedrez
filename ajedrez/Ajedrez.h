@@ -20,8 +20,8 @@ private:
     bool reyNegroMovido = false, torreNegraIzqMovida = false, torreNegraDerMovida = false;
     Posicion casillaEnPassant = {-1, -1};
 
-    double tiempoBlancas = 300.0;
-    double tiempoNegras = 300.0;
+    double tiempoBlancas = 3000.0;
+    double tiempoNegras = 3000.0;
 
     vector<string> historial;
 
