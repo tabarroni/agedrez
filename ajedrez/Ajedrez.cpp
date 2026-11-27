@@ -246,3 +246,6 @@ bool Ajedrez::esJaqueMate(bool esBlanco) {
     }
     return true;
 }
+char Ajedrez::getPieza(int fila, int col) const {
+    return tablero[fila][col];
+}

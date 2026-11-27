@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1795724006 source:e:\agedrez\ajedrez\main.cpp
+1795805452 source:e:\agedrez\ajedrez\main.cpp
+	<SFML/Graphics.hpp>
 	<iostream>
 	<string>
 	<chrono>
 	"Ajedrez.h"
 
-1795725693 e:\agedrez\ajedrez\ajedrez.h
+1795807535 e:\agedrez\ajedrez\ajedrez.h
 	<vector>
 	<string>
 

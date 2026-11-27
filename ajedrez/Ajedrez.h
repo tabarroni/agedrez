@@ -44,6 +44,7 @@ public:
     void mostrarHistorial();
     double getTiempoBlancas();
     double getTiempoNegras();
+    char getPieza(int fila, int col) const;
 };
 
 #endif
